@@ -1,5 +1,5 @@
-use crate::log_line::LogLine;
+use crate::record::LogRecord;
 
 pub trait Logger {
-    fn log(&mut self, value: &dyn LogLine);
+    fn log(&mut self, value: &dyn LogRecord<'_>);
 }

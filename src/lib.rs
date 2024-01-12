@@ -1,11 +1,11 @@
 use std::sync::Mutex;
 
-pub use log_line::LogLine;
 pub use logger::Logger;
 use once_cell::sync::Lazy;
+pub use record::LogRecord;
 
-mod log_line;
 mod logger;
+mod record;
 
 pub static GLOBAL_LOG: Lazy<Mutex<GlobalLog>> = Lazy::new(|| Mutex::new(GlobalLog::new()));
 
@@ -32,11 +32,11 @@ impl GlobalLog {
         self.logger = Some(logger);
     }
 
-    pub fn log<L: LogLine>(&mut self, value: &L) {
+    pub fn log<'erased, R: LogRecord<'erased>>(&mut self, record: &'erased R) {
         let Some(logger) = &mut self.logger else {
             return;
         };
-        logger.log(value);
+        logger.log(record);
     }
 }
 impl Default for GlobalLog {
