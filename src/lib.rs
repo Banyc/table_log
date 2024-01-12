@@ -38,6 +38,12 @@ impl GlobalLog {
         };
         logger.log(record);
     }
+
+    pub fn flush(&mut self) {
+        if let Some(logger) = &mut self.logger {
+            logger.flush();
+        }
+    }
 }
 impl Default for GlobalLog {
     fn default() -> Self {
