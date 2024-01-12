@@ -9,6 +9,11 @@ mod record;
 
 pub static GLOBAL_LOG: Lazy<Mutex<GlobalLog>> = Lazy::new(|| Mutex::new(GlobalLog::new()));
 
+pub fn log<'erased, R: LogRecord<'erased>>(record: &'erased R) {
+    let mut log = GLOBAL_LOG.lock().unwrap();
+    log.log(record);
+}
+
 pub struct GlobalLog {
     logger: Option<Box<dyn Logger + Send + Sync>>,
 }
