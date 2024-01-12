@@ -14,6 +14,11 @@ pub fn log<'erased, R: LogRecord<'erased>>(record: &'erased R) {
     log.log(record);
 }
 
+pub fn flush() {
+    let mut log = GLOBAL_LOG.lock().unwrap();
+    log.flush();
+}
+
 pub struct GlobalLog {
     logger: Option<Box<dyn Logger + Send + Sync>>,
 }
