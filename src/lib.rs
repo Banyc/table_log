@@ -9,10 +9,20 @@ mod record;
 
 pub static GLOBAL_LOG: Lazy<Mutex<GlobalLog>> = Lazy::new(|| Mutex::new(GlobalLog::new()));
 
-pub fn log<'erased, R: LogRecord<'erased>>(record: &'erased R) {
-    let mut log = GLOBAL_LOG.lock().unwrap();
-    log.log(record);
+#[macro_export]
+macro_rules! log {
+    ($record:expr) => {{
+        let mut log = table_log::GLOBAL_LOG.lock().unwrap();
+        if log.has_logger() {
+            log.log($record);
+        }
+    }};
 }
+
+// pub fn log<'erased, R: LogRecord<'erased>>(record: &'erased R) {
+//     let mut log = GLOBAL_LOG.lock().unwrap();
+//     log.log(record);
+// }
 
 pub fn flush() {
     let mut log = GLOBAL_LOG.lock().unwrap();
@@ -25,6 +35,10 @@ pub struct GlobalLog {
 impl GlobalLog {
     pub fn new() -> Self {
         Self { logger: None }
+    }
+
+    pub fn has_logger(&self) -> bool {
+        self.logger.is_some()
     }
 
     pub fn try_register(
