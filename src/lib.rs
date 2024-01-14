@@ -56,6 +56,10 @@ impl GlobalLog {
         self.logger = Some(logger);
     }
 
+    pub fn remove_logger(&mut self) {
+        self.logger = None;
+    }
+
     pub fn log<'erased, R: LogRecord<'erased>>(&mut self, record: &'erased R) {
         let Some(logger) = &mut self.logger else {
             return;
