@@ -2,7 +2,7 @@ use std::sync::Mutex;
 
 pub use logger::Logger;
 use once_cell::sync::Lazy;
-pub use record::LogRecord;
+pub use record::{LogRecord, SerWrap};
 
 mod logger;
 mod record;

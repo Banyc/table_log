@@ -8,6 +8,6 @@ edition = "2021"
 [dependencies]
 erased-serde = "0.4"
 once_cell = "1"
+serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]
-serde = { version = "1", features = ["derive"] }
